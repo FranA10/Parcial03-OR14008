@@ -1,0 +1,72 @@
+-- Create DimDate table
+CREATE TABLE DimFecha (
+    DateKey INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    DateId INT NOT NULL,
+    Year INT NOT NULL,
+    Quarter INT NOT NULL,
+    Month INT NOT NULL,
+    DayofMonth INT NOT NULL,
+    DayOfWeek INT NOT NULL,
+    FlightDate DATE NOT NULL
+);
+
+-- Create DimAerolinea table
+CREATE TABLE DimAerolinea (
+    AirlineKey INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    AirlineId INT NOT NULL,
+    Operating_Airline VARCHAR(50) NOT NULL
+);
+
+-- Create DimOrigen table
+CREATE TABLE DimOrigen (
+    OriginKey INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    OriginAirportID INT NOT NULL,
+    Origin VARCHAR(50) NOT NULL,
+    OriginCityName VARCHAR(50) NOT NULL,
+    OriginState VARCHAR(50) NOT NULL
+);
+
+-- Create DimDestino table
+CREATE TABLE DimDestino (
+    DestinationKey INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    DestAirportID INT NOT NULL,
+    Dest VARCHAR(50) NOT NULL,
+    DestCityName VARCHAR(50) NOT NULL,
+    DestState VARCHAR(50) NOT NULL
+);
+
+-- Create DimCausa table
+CREATE TABLE DimCausa (
+    MotiveKey INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    MotiveId INT NOT NULL,
+    CarrierDalay VARCHAR(50) NOT NULL,
+    WeatherDelay VARCHAR(50) NOT NULL,
+    NASDelay VARCHAR(50) NOT NULL,
+    SecurityDelay VARCHAR(50) NOT NULL,
+    LateAircraftDelay VARCHAR(50) NOT NULL
+);
+
+-- Create factVuelos table
+CREATE TABLE factVuelos (
+    FlightKey INT NOT NULL,
+    DateKey INT NOT NULL,
+    OriginKey INT NOT NULL,
+    DestinationKey INT NOT NULL,
+    AirlineKey INT NOT NULL,
+    MotiveKey INT NOT NULL,
+    DepTime VARCHAR(50) NOT NULL,
+    DepDelay VARCHAR(50) NOT NULL,
+    DepDelayMinutes VARCHAR(50) NOT NULL,
+    ArrTime VARCHAR(50) NOT NULL,
+    ArrDelay VARCHAR(50) NOT NULL,
+    ArrDelayMinutes VARCHAR(50) NOT NULL,
+    Cancelled VARCHAR(50) NOT NULL,
+    CancellationCode VARCHAR(50) NOT NULL,
+    Diverted VARCHAR(50) NOT NULL,
+    PRIMARY KEY (FlightKey),
+    FOREIGN KEY (DateKey) REFERENCES DimFecha (DateKey),
+    FOREIGN KEY (OriginKey) REFERENCES DimOrigen (OriginKey),
+    FOREIGN KEY (DestinationKey) REFERENCES DimDestino (DestinationKey),
+    FOREIGN KEY (AirlineKey) REFERENCES DimAerolinea (AirlineKey),
+    FOREIGN KEY (MotiveKey) REFERENCES DimCausa (MotiveKey)
+);
